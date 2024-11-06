@@ -1,0 +1,38 @@
+- name: Install Playwright and Chromium
+  hosts: your_linux_hosts
+  become: yes
+
+  tasks:
+    - name: Update package lists
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Install Node.js and npm
+      apt:
+        name: nodejs npm
+        state: present
+
+    - name: Install Playwright globally
+      command: npm install -g playwright
+
+    - name: Download Chromium
+      get_url:
+        url: https://your_nexus_server/repository/chromium-browser/your_chromium_version.tar.gz
+        dest: /tmp/chromium.tar.gz
+        checksum: sha256:your_checksum_here # Replace with the actual checksum
+
+    - name: Extract Chromium
+      unarchive:
+        src: /tmp/chromium.tar.gz
+        dest: /usr/local/share/chromium
+        remote_src: yes
+
+    - name: Set Playwright Chromium path
+      command: playwright install chromium
+
+  handlers:
+    - name: Restart services
+      systemd:
+        name: your_service_name
+        state: restarted
