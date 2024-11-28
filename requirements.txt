@@ -1,0 +1,4 @@
+azure-monitor-ingestion==1.0.4
+azure-identity==1.11.0
+azure-core==1.31.0
+requests==2.31.0
